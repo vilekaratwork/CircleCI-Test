@@ -8,8 +8,18 @@ jobs:
     steps:
       - checkout
       - run: python main.py
+  test:
+    working_directory: ~/circlecidemo
+    docker:
+      - image: "cimg/python:3.8"
+    steps:
+      - checkout
+      - run: python main-test.py
 
 workflows:
   buildnow:
     jobs:
       - build
+      - test:
+        requires:
+          - build
