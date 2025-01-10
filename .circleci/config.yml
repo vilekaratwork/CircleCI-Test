@@ -1,6 +1,5 @@
 version: 2.1
 
-
 jobs:
   build:
     docker:
@@ -14,6 +13,7 @@ jobs:
     steps:
       - checkout
       - run: python main-test.py
+  
   deploy:
     docker:
       - image: "cimg/python:3.8"
@@ -26,9 +26,14 @@ workflows:
       - test:
           requires:
             - build 
-      - deploy:
+      - hold:
+          type: approval
           requires:
             - test
-          filters:
-            branches:
-              only: main
+      - deploy:
+          requires:
+          #   - test
+          # filters:
+          #   branches:
+          #     only: main
+            - hold
